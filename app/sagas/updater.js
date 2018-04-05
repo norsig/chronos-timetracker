@@ -1,4 +1,5 @@
 // @flow
+/* eslint-disable no-alert */
 import {
   delay,
 } from 'redux-saga';
@@ -35,10 +36,11 @@ import {
   incrementMixpanel,
 } from '../utils/stat';
 
+import {
+  getFromStorage,
+} from './storage';
 
-const {
-  autoUpdater,
-} = remote.require('electron-updater');
+const { autoUpdater } = remote.require('electron-updater');
 const log = remote.require('electron-log');
 
 let checkingForUpdatesChannel;
@@ -88,7 +90,7 @@ function* watchUpdateAvailable(): Generator<*, *, *> {
     yield put(uiActions.setUiState('updateFetching', true));
     newVersion = ev.version;
 
-    let settings = yield call(getFromStorage, 'localDesktopSettings');
+    const settings = yield call(getFromStorage, 'localDesktopSettings');
     if (settings.updateAutomatically) {
       uiActions.installUpdateRequest();
     }
@@ -108,6 +110,20 @@ function* watchUpdateNotAvailable(): Generator<*, *, *> {
 }
 
 function* watchUpdateDownloaded(): Generator<*, *, *> {
+  const parseReleaseNotes = releaseNotes =>
+    releaseNotes
+      .replace(/<style([\s\S]*?)<\/style>/gi, '')
+      .replace(/<script([\s\S]*?)<\/script>/gi, '')
+      .replace(/<\/div>/ig, '\n')
+      .replace(/<\/li>/ig, '\n')
+      .replace(/<li>/ig, '  *  ')
+      .replace(/<\/ul>/ig, '\n')
+      .replace(/<\/h2>/ig, '\n')
+      .replace(/<\/h3>/ig, '\n')
+      .replace(/<\/p>/ig, '\n')
+      .replace(/<br\s*[/]?>/gi, '\n')
+      .replace(/<[^>]+>/ig, '');
+
   while (true) {
     const meta = yield take(updateDownloadedChannel);
     yield call(
@@ -124,7 +140,7 @@ function* watchUpdateDownloaded(): Generator<*, *, *> {
       trackMixpanel('Update installed');
       incrementMixpanel('Update installed', 1);
 
-      let settings = yield call(getFromStorage, 'localDesktopSettings');
+      const settings = yield call(getFromStorage, 'localDesktopSettings');
       if (settings.updateAutomatically) {
         const { running, uploading } = getGlobal('sharedObj');
         if (uploading) {
@@ -140,9 +156,8 @@ function* watchUpdateDownloaded(): Generator<*, *, *> {
           }
         }
       } else {
-        let releaseNotes = parseReleaseNotes(meta.ev.releaseNotes.trim());
-        
-        if (window.confirm('New version is available:\n\n' + releaseNotes + 'Would you like to install it now?')) {
+        const releaseNotes = parseReleaseNotes(meta.ev.releaseNotes.trim());
+        if (window.confirm(`New version is available:\n\n${releaseNotes} Would you like to install it now?`)) {
           const { running, uploading } = getGlobal('sharedObj');
           if (uploading) {
             window.alert('Currently app in process of saving worklog, wait few seconds and restart app');
@@ -212,17 +227,3 @@ export function* initializeUpdater(): Generator<*, *, *> {
   }
 }
 
-function parseReleaseNotes(releaseNotes) {
-  releaseNotes = releaseNotes.replace(/<style([\s\S]*?)<\/style>/gi, '');
-  releaseNotes = releaseNotes.replace(/<script([\s\S]*?)<\/script>/gi, '');
-  releaseNotes = releaseNotes.replace(/<\/div>/ig, '\n');
-  releaseNotes = releaseNotes.replace(/<\/li>/ig, '\n');
-  releaseNotes = releaseNotes.replace(/<li>/ig, '  *  ');
-  releaseNotes = releaseNotes.replace(/<\/ul>/ig, '\n');
-  releaseNotes = releaseNotes.replace(/<\/h2>/ig, '\n');
-  releaseNotes = releaseNotes.replace(/<\/h3>/ig, '\n');
-  releaseNotes = releaseNotes.replace(/<\/p>/ig, '\n');
-  releaseNotes = releaseNotes.replace(/<br\s*[\/]?>/gi, "\n");
-  releaseNotes = releaseNotes.replace(/<[^>]+>/ig, '');
-  return releaseNotes;
-}
