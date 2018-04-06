@@ -1,3 +1,13 @@
+<a name="2.7.2"></a>
+## [2.7.2](https://github.com/web-pal/chronos-timetracker/compare/v2.7.1...v2.7.2) (2018-04-06)
+
+
+### Bug Fixes
+
+* **Tracking:** fix adjustStartTime behaviour ([ecc2dfb](https://github.com/web-pal/chronos-timetracker/commit/ecc2dfb)), closes [#84](https://github.com/web-pal/chronos-timetracker/issues/84)
+
+
+
 <a name="2.7.1"></a>
 ## [2.7.1](https://github.com/web-pal/chronos-timetracker/compare/v2.7.0...v2.7.1) (2018-04-05)
 
