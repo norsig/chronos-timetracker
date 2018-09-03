@@ -8,10 +8,8 @@ import type {
 } from 'react';
 
 import {
-  CircleText,
   CircleStop,
   CircleProgress,
-  CircleContainer,
   CircleBackground,
 } from './styled';
 
@@ -45,7 +43,7 @@ const CircularProgressBar: StatelessFunctionalComponent<Props> = ({
       position="left"
       delay={200}
     >
-      <CircleContainer
+      <svg
         width={sqSize}
         height={sqSize}
         viewBox={viewBox}
@@ -68,14 +66,6 @@ const CircularProgressBar: StatelessFunctionalComponent<Props> = ({
               strokeDashoffset: dashOffset,
             }}
         />
-        <CircleText
-          x="50%"
-          y="50%"
-          dy=".3em"
-          textAnchor="middle"
-        >
-          {`${percentage}%`}
-        </CircleText>
         <CircleStop
           x="20"
           y="20"
@@ -83,7 +73,7 @@ const CircularProgressBar: StatelessFunctionalComponent<Props> = ({
           width="20"
           height="20"
         />
-      </CircleContainer>
+      </svg>
     </Tooltip>
   );
 };

@@ -13,19 +13,10 @@ export const ProgressBarContainer = styled(Flex).attrs({
   cursor: pointer;
 `;
 
-export const CircleContainer = styled.svg`
-  // & > text,
-  // &:hover > rect {
-  //   display: none;
-  // }
-  // &:hover > text {
-  //   display: block;
-  // }
-`;
-
 export const CircleBackground = styled.circle`
   fill: #172B4D;
   stroke: white;
+  cursor: pointer;
 `;
 
 export const CircleProgress = styled.circle`
@@ -33,15 +24,10 @@ export const CircleProgress = styled.circle`
   stroke: #FFAB00;
   stroke-linecap: round;
   stroke-linejoin: round;
-`;
-
-export const CircleText = styled.text`
-  fill: rgba(225,225,225,.9);
-  font-size: 12px;
-  letter-spacing: 0.5px;
-  display: none;
+  cursor: pointer;
 `;
 
 export const CircleStop = styled.rect`
   fill: white;
+  cursor: pointer;
 `;

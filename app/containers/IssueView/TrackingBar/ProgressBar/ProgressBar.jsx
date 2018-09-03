@@ -50,7 +50,7 @@ const ProgressBar: StatelessFunctionalComponent<Props> = ({
   return (
     <ProgressBarContainer>
       <CircularProgressBar
-        percentage={percentage > 100 ? 100 : percentage}
+        percentage={percentage}
         content={content}
         onClick={onClick}
       />
