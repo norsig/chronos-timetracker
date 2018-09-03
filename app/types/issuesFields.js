@@ -46,6 +46,12 @@ export type IssueWorklog = {
   worklogs: Array<Worklog>,
 };
 
+export type IssueProgress = {
+  percent: number,
+  progress: number,
+  total: number,
+};
+
 export type IssueField = {
   summary: string,
   created: string,
@@ -68,6 +74,8 @@ export type IssueField = {
   resolutiondate: string | null,
   labels: Array<string>,
   timeestimate: number | null,
+  timeoriginalestimate: number | null,
+  progress: IssueProgress,
   versions: Array<Version>,
   worklog: IssueWorklog,
   worklogs: Array<Id>,

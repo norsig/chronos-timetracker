@@ -20,6 +20,8 @@ const requiredFields: Array<string> = [
   'worklog',
   'timeestimate',
   'timespent',
+  'timeoriginalestimate',
+  'progress',
   'fixVersions',
   'versions',
   'components',
